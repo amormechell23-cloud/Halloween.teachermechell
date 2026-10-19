@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Halloween Gold Rush</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0713;--purple:#2a1450;--blood:#b3122b;--ghost:#f4f0ff;--orange:#ff8a1f;--gold:#ffd23f;--pump:#ff7a00;--gho:#9b5cff;
+--hd:'Creepster','Chiller','Impact',fantasy;--bd:'Fredoka','Trebuchet MS',Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0713;--purple:#2a1450;--blood:#b3122b;--ghost:#f4f0ff;--orange:#ff8a1f;--gold:#ffd23f;--pump:#ff7a00;--gho:#9b5cff}}
+:root[data-theme="dark"]{--bg:#0b0713}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:radial-gradient(ellipse at 50% 0,var(--purple),var(--bg) 70%);color:var(--ghost);font-family:var(--bd);font-weight:500;overflow-x:hidden;min-height:100%}
+button{font-family:var(--bd);font-weight:700;cursor:pointer;border:0;border-radius:14px;color:#1a0a00;font-size:clamp(16px,2vw,24px);padding:.7em 1.1em;background:linear-gradient(#ffe27a,var(--orange));box-shadow:0 4px 0 #8a3b00,0 0 18px #ff8a1f55;transition:transform .1s}
+button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px)}
+button:focus-visible{outline:4px solid var(--ghost);outline-offset:3px}
+button:disabled{cursor:not-allowed}
+.red{background:linear-gradient(#ff5b6e,var(--blood));color:#fff;box-shadow:0 4px 0 #5a0615}
+.dim{background:#4a3a6a;color:var(--ghost);box-shadow:0 4px 0 #1d1233}
+.grn{background:linear-gradient(#a8ff9a,#2fb344);box-shadow:0 4px 0 #14561f}
+/* scenery */
+#scene{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.moon{position:absolute;top:5%;right:8%;width:clamp(70px,12vw,150px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffbe6,#f3e6a8 60%,#cdbb73);box-shadow:0 0 80px 20px #f3e6a855}
+.fog{position:absolute;left:-30%;width:160%;height:30%;background:radial-gradient(ellipse,#cbb8ff33,transparent 65%);animation:drift 28s linear infinite}
+.fog.a{bottom:0}.fog.b{bottom:12%;animation-duration:40s;animation-direction:reverse}
+@keyframes drift{from{transform:translateX(-8%)}to{transform:translateX(8%)}}
+.gy{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:flex-end;font-size:clamp(28px,5vw,64px);opacity:.75;filter:drop-shadow(0 0 8px #000)}
+.gy span:nth-child(3n){animation:flick 3s infinite}
+@keyframes flick{0%,100%{opacity:1}45%{opacity:.4}50%{opacity:1}60%{opacity:.5}}
+.fl{position:absolute;font-size:clamp(24px,4vw,48px);animation:float 9s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
+.web{position:absolute;top:0;left:0;font-size:clamp(50px,9vw,120px);opacity:.5}
+#app{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:14px 16px 90px}
+.hide{display:none!important}
+h1{font-family:var(--hd);font-weight:400;font-size:clamp(34px,6.5vw,86px);margin:.1em 0;color:var(--orange);text-shadow:0 0 14px #ff8a1f,3px 3px 0 var(--blood);letter-spacing:.03em;text-align:center}
+.sub{text-align:center;font-size:clamp(16px,2.3vw,28px);font-style:italic;margin:0 0 16px;color:#e7d9ff}
+#welcome,#final{text-align:center;padding-top:6vh}
+#welcome .big,#final .big{font-size:clamp(22px,3vw,36px);padding:.8em 1.6em}
+#welcome p{max-width:640px;margin:14px auto;font-size:clamp(16px,2vw,24px);line-height:1.5}
+/* scoreboard */
+#top{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;margin-bottom:12px}
+.team{border-radius:18px;padding:10px 14px;text-align:center;border:4px solid transparent;background:#150b26cc;transition:.25s}
+.team.p{--c:var(--pump)}.team.g{--c:var(--gho)}
+.team h2{margin:0;font-size:clamp(16px,2.2vw,28px);color:var(--c)}
+.team .sc{font-family:var(--hd);font-size:clamp(46px,7vw,92px);line-height:1;color:var(--c);text-shadow:0 0 16px var(--c)}
+.team.on{border-color:var(--c);box-shadow:0 0 30px var(--c);transform:scale(1.02)}
+.team .adj{display:flex;gap:6px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+.team .adj button{font-size:15px;padding:.4em .8em}
+.mid{display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:center;min-width:170px}
+#turn{font-size:clamp(18px,2.4vw,30px);font-weight:700;padding:.4em .8em;border-radius:40px;background:#000a;border:3px solid var(--orange);text-align:center}
+#prog{font-size:clamp(15px,1.8vw,22px);color:var(--gold)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tools button{font-size:15px;padding:.45em .9em}
+/* board */
+#board{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(8px,1.4vw,18px)}
+.chest{aspect-ratio:1.25;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;background:linear-gradient(#5a2d0c,#2a1204);color:var(--gold);border:3px solid var(--gold);box-shadow:0 0 14px #ffd23f55,inset 0 0 20px #000;animation:glow 3s ease-in-out infinite}
+.chest:nth-child(odd){animation-delay:1.2s}
+@keyframes glow{50%{box-shadow:0 0 28px #ffd23faa,inset 0 0 20px #000}}
+.chest .e{font-size:clamp(28px,4.5vw,56px)}
+.chest .n{font-family:var(--hd);font-weight:400;font-size:clamp(26px,4vw,50px);line-height:1}
+.chest.done{background:#1a1226;border-color:#4a3a6a;color:#8d7fb0;box-shadow:none;animation:none;filter:grayscale(.7);opacity:.7}
+.chest.done .n{font-size:clamp(14px,1.8vw,22px);font-family:var(--bd)}
+.chest.done.skip{opacity:.45}
+/* modal */
+.ov{position:fixed;inset:0;z-index:20;background:#000c;display:flex;align-items:center;justify-content:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.card{width:min(900px,100%);max-height:100%;overflow:auto;background:linear-gradient(#2a1450,#120922);border:5px solid var(--orange);border-radius:24px;padding:clamp(14px,2.5vw,28px);text-align:center;box-shadow:0 0 50px #ff8a1f88;animation:pop .25s ease-out}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.card .who{font-size:clamp(18px,2.4vw,30px);font-weight:700}
+.card .pic{font-size:clamp(70px,13vw,160px);line-height:1.1;filter:drop-shadow(0 0 20px #ff8a1f)}
+.card .word{font-family:var(--hd);font-weight:400;font-size:clamp(52px,10vw,130px);line-height:1;color:var(--gold);text-shadow:0 0 18px #ff8a1f,3px 3px 0 var(--blood);margin:4px 0}
+.card .task{font-size:clamp(20px,3vw,36px);margin:8px 0;color:#fff}
+#ans{margin:10px auto;padding:12px 16px;border-radius:16px;background:#000a;border:3px dashed var(--gold);font-size:clamp(20px,2.8vw,34px);line-height:1.4;max-width:760px}
+#ans b{color:var(--gold)}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.row button kbd{font-family:inherit;opacity:.65;font-size:.7em;margin-left:.3em}
+/* coins + confetti */
+.coin{position:fixed;z-index:40;font-size:40px;pointer-events:none;animation:coin 1.3s ease-out forwards}
+@keyframes coin{0%{transform:translate(0,0) scale(.5);opacity:1}100%{transform:translate(var(--x),var(--y)) rotate(540deg) scale(1.2);opacity:0}}
+.fall{position:fixed;top:-60px;z-index:30;pointer-events:none;font-size:36px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(112vh) rotate(360deg)}}
+#final .win{font-family:var(--hd);font-size:clamp(40px,8vw,100px);color:var(--gold);text-shadow:0 0 24px #ff8a1f,4px 4px 0 var(--blood);animation:shake 1.4s infinite;margin:10px 0}
+@keyframes shake{0%,100%{transform:rotate(-2deg) scale(1)}50%{transform:rotate(2deg) scale(1.06)}}
+#final .fs{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:14px 0 24px}
+#final .fs div{min-width:220px;padding:14px 20px;border-radius:18px;background:#150b26dd;border:4px solid var(--c);font-size:clamp(20px,2.6vw,32px)}
+#final .fs b{display:block;font-family:var(--hd);font-weight:400;font-size:clamp(50px,8vw,100px);line-height:1;color:var(--c)}
+@media (max-width:760px){#board{grid-template-columns:repeat(4,1fr)}#top{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;order:-1}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important}}
+</style>
+</head>
+<body>
+<div id="scene" aria-hidden="true">
+ <div class="moon"></div><div class="web">🕸️</div>
+ <span class="fl" style="top:22%;left:12%">👻</span><span class="fl" style="top:40%;right:10%;animation-delay:2s">👻</span>
+ <span class="fl" style="top:12%;left:45%;animation-delay:1s">🦇</span><span class="fl" style="top:58%;left:4%;animation-delay:3s">🦇</span><span class="fl" style="top:30%;right:28%;animation-delay:4s">🦇</span>
+ <div class="fog a"></div><div class="fog b"></div>
+ <div class="gy"><span>🌲</span><span>🪦</span><span>🎃</span><span>🏚️</span><span>🌲</span><span>🪦</span><span>🎃</span><span>🌲</span><span>🪦</span><span>🎃</span></div>
+</div>
+
+<main id="app">
+ <h1>🎃 HALLOWEEN GOLD RUSH 👻</h1>
+ <p class="sub">Dig for Gold. Learn Halloween Words. Win the Treasure!</p>
+
+ <section id="welcome">
+  <p>Two teams. Twenty treasures. Pick a number, learn a Halloween word, and win gold coins!</p>
+  <button class="big" id="startBtn">⛏️ START GAME</button>
+  <p style="font-size:16px;opacity:.8">Teacher keys: type a number + Enter to open a treasure. In a challenge: R = reveal, 1 = +10, 2 = +20, 3 = 0 points, 4 = −5, S = skip, Esc = back.</p>
+ </section>
+
+ <section id="game" class="hide">
+  <div id="top">
+   <div class="team p" id="t0"><h2>🟠 TEAM PUMPKIN</h2><div class="sc" id="s0">0</div>
+    <div class="adj"><button data-t="0" data-d="10">+10</button><button class="red" data-t="0" data-d="-5">−5</button></div></div>
+   <div class="mid"><div id="turn"></div><div id="prog"></div>
+    <div class="tools"><button class="dim" id="muteBtn">🔊 Sound ON</button><button class="dim" id="rsBtn">Reset scores</button><button class="red" id="resetBtn">RESET GAME</button><button class="dim" id="endBtn">End game</button></div></div>
+   <div class="team g" id="t1"><h2>🟣 TEAM GHOST</h2><div class="sc" id="s1">0</div>
+    <div class="adj"><button data-t="1" data-d="10">+10</button><button class="red" data-t="1" data-d="-5">−5</button></div></div>
+  </div>
+  <div id="board"></div>
+ </section>
+
+ <section id="final" class="hide">
+  <div class="win" id="winner"></div>
+  <div class="fs"><div style="--c:var(--pump)">🟠 TEAM PUMPKIN<b id="f0">0</b></div><div style="--c:var(--gho)">🟣 TEAM GHOST<b id="f1">0</b></div></div>
+  <button class="big" id="againBtn">🔁 PLAY AGAIN</button>
+ </section>
+</main>
+
+<div class="ov hide" id="chal" role="dialog" aria-modal="true" aria-labelledby="cw">
+ <div class="card">
+  <div class="who" id="cwho"></div>
+  <div class="pic" id="cpic"></div>
+  <div class="word" id="cw"></div>
+  <div class="task" id="ctask"></div>
+  <div id="ans" class="hide"></div>
+  <div class="row"><button id="revBtn">👁️ REVEAL ANSWER <kbd>R</kbd></button></div>
+  <div class="row">
+   <button class="grn" data-p="10">+10 POINTS <kbd>1</kbd></button>
+   <button class="grn" data-p="20">+20 POINTS <kbd>2</kbd></button>
+   <button class="dim" data-p="0">0 POINTS <kbd>3</kbd></button>
+   <button class="red" data-p="-5">−5 POINTS <kbd>4</kbd></button>
+  </div>
+  <div class="row"><button class="dim" id="skipBtn">⏭️ SKIP QUESTION <kbd>S</kbd></button><button class="dim" id="backBtn">↩ Back to treasures <kbd>Esc</kbd></button></div>
+ </div>
+</div>
+
+<div class="ov hide" id="ask" role="alertdialog" aria-modal="true">
+ <div class="card" style="max-width:560px"><div class="task" id="askMsg"></div>
+  <div class="row"><button class="red" id="askYes">Yes, reset</button><button class="dim" id="askNo">No, keep playing</button></div></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var W=[
+["Ghost","👻","The spirit of a dead person.","I saw a ghost in the haunted house."],
+["Witch","🧙","A person in stories who uses magic.","The witch rides a broom."],
+["Pumpkin","🎃","A large orange vegetable often used for Halloween decorations.","We carved a pumpkin."],
+["Bat","🦇","A flying mammal.","A bat flew across the night sky."],
+["Spider","🕷️","A small animal with eight legs.","A spider made a web."],
+["Skeleton","💀","The bones inside a body.","The skeleton danced at the party."],
+["Zombie","🧟","A fictional dead person who moves around.","The zombie walked slowly."],
+["Vampire","🧛","A fictional creature that drinks blood.","The vampire sleeps during the day."],
+["Mummy","🧻","A preserved body wrapped in cloth.","The mummy came out of the tomb."],
+["Monster","👹","A frightening imaginary creature.","The monster lives in a cave."],
+["Haunted house","🏚️","A house believed to have ghosts.","We entered the haunted house."],
+["Graveyard","🪦","A place where dead people are buried.","The graveyard was quiet at night."],
+["Cauldron","🫕","A large pot often used by witches in stories.","The witch stirred her cauldron."],
+["Broomstick","🧹","A broom used for flying by witches in stories.","The witch flew on her broomstick."],
+["Candy","🍬","A sweet treat.","I received candy on Halloween."],
+["Costume","🎭","Special clothes worn to look like someone or something else.","My costume is a vampire."],
+["Mask","👺","Something worn over the face as a disguise.","He wore a scary mask."],
+["Trick-or-treat","🍭","A Halloween activity where children ask for candy.","We went trick-or-treating."],
+["Coffin","⚰️","A box used to bury or hold a dead body.","The vampire slept in a coffin."],
+["Potion","🧪","A special liquid, often magical in stories.","The witch made a magic potion."]
+];
+var TASKS=["Say the word out loud!","Tell us what it means!","Use it in a sentence!","Look at the picture. What is it?"];
+var NAMES=["🟠 TEAM PUMPKIN","🟣 TEAM GHOST"];
+var S={scores:[0,0],turn:0,done:[],cur:-1,muted:false,reveal:false,buf:"",bt:0};
+var $=function(id){return document.getElementById(id)};
+var ac=null;
+
+/* sound */
+function tone(f,t,d,type,v,when){if(S.muted)return;try{
+ ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+ var o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+(when||0);
+ o.type=type||"sine";o.frequency.setValueAtTime(f,s);if(t)o.frequency.exponentialRampToValueAtTime(t,s+d);
+ g.gain.setValueAtTime(v||.15,s);g.gain.exponentialRampToValueAtTime(.001,s+d);
+ o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d+.02);}catch(e){}}
+var SFX={
+ open:function(){tone(90,240,.35,"sawtooth",.12);tone(300,600,.2,"square",.05,.25)},
+ gold:function(){[988,1319,1568].forEach(function(f,i){tone(f,0,.18,"triangle",.14,i*.09)})},
+ wrong:function(){tone(220,70,.5,"sawtooth",.16)},
+ win:function(){[523,659,784,1047,784,1047,1319].forEach(function(f,i){tone(f,0,.22,"square",.1,i*.14)})}
+};
+
+/* helpers */
+function bump(){return}
+function show(id,on){$(id).classList.toggle("hide",!on)}
+function left(){return S.done.filter(function(d){return !d}).length}
+function render(){
+ $("s0").textContent=S.scores[0];$("s1").textContent=S.scores[1];
+ $("t0").classList.toggle("on",S.turn===0);$("t1").classList.toggle("on",S.turn===1);
+ $("turn").textContent="👉 "+NAMES[S.turn]+"’s turn";
+ $("prog").textContent="💰 Treasures left: "+left()+" / 20";
+ var b=$("board");b.innerHTML="";
+ W.forEach(function(w,i){
+  var c=document.createElement("button");c.className="chest";
+  var d=S.done[i];
+  if(d){c.className+=" done"+(d==="skip"?" skip":"");c.disabled=true;
+   c.innerHTML='<span class="e">'+w[1]+'</span><span class="n">'+w[0]+'</span>';}
+  else{c.innerHTML='<span class="e">💰</span><span class="n">'+(i+1)+'</span>';c.setAttribute("aria-label","Treasure "+(i+1));
+   c.onclick=function(){openChest(i)};}
+  b.appendChild(c);
+ });
+}
+function coins(){
+ for(var i=0;i<14;i++){var c=document.createElement("span");c.className="coin";c.textContent="🪙";
+  c.style.left=(40+Math.random()*20)+"vw";c.style.top="45vh";
+  c.style.setProperty("--x",(Math.random()*500-250)+"px");c.style.setProperty("--y",(-150-Math.random()*250)+"px");
+  document.body.appendChild(c);setTimeout(function(el){el.remove()},1400,c);}
+}
+function confetti(){
+ var E=["🎃","👻","🦇","🪙","🕷️","🍬"];
+ for(var i=0;i<40;i++){var c=document.createElement("span");c.className="fall";c.textContent=E[i%E.length];
+  c.style.left=Math.random()*100+"vw";c.style.animationDuration=(3+Math.random()*3)+"s";c.style.animationDelay=(Math.random()*2)+"s";
+  document.body.appendChild(c);setTimeout(function(el){el.remove()},8000,c);}
+}
+
+/* flow */
+function newGame(){S.scores=[0,0];S.turn=0;S.done=W.map(function(){return 0});S.cur=-1;
+ show("chal",false);show("ask",false);show("final",false);show("welcome",false);show("game",true);render();}
+function openChest(i){
+ if(S.done[i])return;S.cur=i;S.reveal=false;var w=W[i];
+ $("cwho").textContent="⛏️ "+NAMES[S.turn]+" opened treasure #"+(i+1);
+ $("cpic").textContent=w[1];$("cw").textContent="❓ ❓ ❓";
+ $("ctask").textContent="Look at the picture. What is it? 🤔";
+ $("ans").classList.add("hide");$("revBtn").textContent="👁️ REVEAL ANSWER";
+ show("chal",true);SFX.open();$("revBtn").focus();
+}
+function reveal(){
+ if(S.cur<0)return;var w=W[S.cur];
+ $("cw").textContent=w[0];$("ctask").textContent="Did you guess right? 🎉";$("revBtn").textContent="✅ ANSWER SHOWN";$("ans").innerHTML="<b>Meaning:</b> "+w[2]+"<br><b>Example:</b> “"+w[3]+"”";
+ $("ans").classList.remove("hide");S.reveal=true;
+}
+function closeChal(){show("chal",false);S.cur=-1;}
+function award(p){
+ if(S.cur<0||S.done[S.cur])return;
+ S.scores[S.turn]=Math.max(0,S.scores[S.turn]+p);
+ S.done[S.cur]=1;
+ if(p>0){coins();SFX.gold()}else SFX.wrong();
+ finishTurn();
+}
+function skip(){if(S.cur<0||S.done[S.cur])return;S.done[S.cur]="skip";finishTurn();}
+function finishTurn(){
+ closeChal();S.turn=1-S.turn;render();
+ if(left()===0)setTimeout(endGame,900);
+}
+function adjust(t,d){S.scores[t]=Math.max(0,S.scores[t]+d);if(d>0){coins();SFX.gold()}else SFX.wrong();render();}
+function endGame(){
+ show("game",false);show("final",true);
+ $("f0").textContent=S.scores[0];$("f1").textContent=S.scores[1];
+ var a=S.scores[0],b=S.scores[1];
+ $("winner").textContent=a===b?"👻 IT’S A TIE! 🎃":(a>b?"🎃 TEAM PUMPKIN WINS! 🎃":"👻 TEAM GHOST WINS! 👻");
+ confetti();SFX.win();
+}
+function ask(msg,yes){$("askMsg").textContent=msg;show("ask",true);$("askNo").focus();
+ $("askYes").onclick=function(){show("ask",false);yes()};}
+
+/* wiring */
+$("startBtn").onclick=newGame;
+$("againBtn").onclick=newGame;
+$("revBtn").onclick=reveal;
+$("skipBtn").onclick=skip;
+$("backBtn").onclick=closeChal;
+$("askNo").onclick=function(){show("ask",false)};
+$("endBtn").onclick=function(){ask("End the game now and show the winner?",endGame)};
+$("resetBtn").onclick=function(){ask("Reset all scores and treasures? The game will start over.",newGame)};
+$("rsBtn").onclick=function(){ask("Reset both team scores to 0? Opened treasures stay opened.",function(){S.scores=[0,0];render()})};
+$("muteBtn").onclick=function(){S.muted=!S.muted;$("muteBtn").textContent=S.muted?"🔇 Sound OFF":"🔊 Sound ON"};
+document.querySelectorAll("[data-p]").forEach(function(b){b.onclick=function(){award(+b.dataset.p)}});
+document.querySelectorAll("[data-t]").forEach(function(b){b.onclick=function(){adjust(+b.dataset.t,+b.dataset.d)}});
+
+document.addEventListener("keydown",function(e){
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ var k=e.key,chal=!$("chal").classList.contains("hide"),askOpen=!$("ask").classList.contains("hide");
+ if(askOpen){if(k==="Escape")show("ask",false);return}
+ if(chal){
+  if(k==="Escape")closeChal();
+  else if(k==="r"||k==="R")reveal();
+  else if(k==="1")award(10);else if(k==="2")award(20);else if(k==="3")award(0);else if(k==="4")award(-5);
+  else if(k==="s"||k==="S")skip();
+  return;
+ }
+ if($("game").classList.contains("hide"))return;
+ if(/^[0-9]$/.test(k)){S.buf=(S.buf+k).slice(-2);clearTimeout(S.bt);S.bt=setTimeout(function(){S.buf=""},1500);}
+ else if(k==="Enter"&&S.buf){var n=parseInt(S.buf,10);S.buf="";
+  if(n>=1&&n<=20&&document.activeElement&&document.activeElement.tagName!=="BUTTON"||n>=1&&n<=20&&!S.done[n-1]){e.preventDefault();openChest(n-1)}}
+});
+S.done=W.map(function(){return 0});
+})();
+</script>
+</body>
+</html>
